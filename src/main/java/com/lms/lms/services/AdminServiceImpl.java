@@ -7,14 +7,12 @@ import com.lms.lms.dtos.request.LoginRequest;
 import com.lms.lms.dtos.response.CreateAdminResponse;
 import com.lms.lms.dtos.response.LoginResponse;
 import com.lms.lms.exceptions.AdminException;
-import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 
@@ -32,7 +30,7 @@ public class AdminServiceImpl implements AdminService {
         Admin admin = Admin.builder().
                 firstName(createAdminRequest.getFirstName()).
                 lastName(createAdminRequest.getLastName()).
-                email(createAdminRequest.getEmail()).
+                email(createAdminRequest.getEmail().toLowerCase()).
                 password(createAdminRequest.getPassword()).
                 phoneNumber(createAdminRequest.getPhoneNumber()).build();
         Admin savedAdmin = adminRepository.save(admin);
@@ -50,7 +48,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public LoginResponse login(LoginRequest loginRequest) {
+    public LoginResponse adminLogin(LoginRequest loginRequest) {
         LoginResponse loginResponse = new LoginResponse();
         Admin foundAdmin = findAdminByEmail(loginRequest.getEmail());
         if (foundAdmin == null)throw new AdminException("Admin with email "+loginRequest.getEmail()+" doesnt exist");
@@ -66,4 +64,25 @@ public class AdminServiceImpl implements AdminService {
     public List<Admin> getAdmins() {
         return adminRepository.findAll();
     }
+
+    @Override
+    public String deleteAdminById(Long id) {
+        Admin foundAdmin = findAdminById(id);
+        adminRepository.deleteById(foundAdmin.getId());
+        return "Admin deleted successfully";
+    }
+
+    @Override
+    public String  deleteByEmail(String email) {
+        Admin foundAdmin = findAdminByEmail(email);
+        adminRepository.delete(foundAdmin);
+        return "Admin deleted successfully";
+    }
+
+    @Override
+    public void deleteAll() {
+        adminRepository.deleteAll();
+    }
+
+
 }

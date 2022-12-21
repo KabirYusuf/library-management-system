@@ -35,12 +35,25 @@ public class AdminController {
     }
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest loginRequest){
-        return adminService.login(loginRequest);
+        return adminService.adminLogin(loginRequest);
     }
 
     @GetMapping("/getAdmins")
     public ResponseEntity<List<Admin>> getAdmins(){
         return new ResponseEntity<>(adminService.getAdmins(), HttpStatus.CREATED);
+    }
+    @DeleteMapping("/deleteById/{adminId}")
+    public String deleteAdminById(@PathVariable("adminId") Long id){
+//        return new  ResponseEntity<>(adminService.deleteAdminById(id), HttpStatus.CREATED);
+        return adminService.deleteAdminById(id);
+
+    }
+
+    @DeleteMapping("/deleteByEmail/{adminEmail}")
+    public String deleteAdminByEmail(@PathVariable("adminEmail") String email){
+//        return new  ResponseEntity<>(adminService.deleteAdminById(id), HttpStatus.CREATED);
+        return adminService.deleteByEmail(email);
+
     }
 
 }

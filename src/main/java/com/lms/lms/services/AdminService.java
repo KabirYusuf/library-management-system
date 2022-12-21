@@ -14,7 +14,12 @@ public interface AdminService {
 
     Admin findAdminByEmail(String email);
 
-    LoginResponse login(LoginRequest loginRequest);
+    LoginResponse adminLogin(LoginRequest loginRequest);
 
     List<Admin> getAdmins();
+    String deleteAdminById(Long id);
+
+    String deleteByEmail(String email);
+
+    void deleteAll();
 }
