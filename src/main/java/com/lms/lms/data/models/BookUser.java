@@ -1,5 +1,6 @@
 package com.lms.lms.data.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +17,10 @@ public class BookUser extends User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @JsonIgnore
+    private String password;
+    //    @Column(nullable = false, length = 50)
+    private String phoneNumber;
     @ManyToMany
     private List<Book> borrowedBooks = new ArrayList<>();
     @ManyToMany

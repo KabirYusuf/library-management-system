@@ -30,10 +30,7 @@ public class User {
     @Email
     private String email;
 //    @Column(nullable = false, length = 50)
-    @JsonIgnore
-    private String password;
-//    @Column(nullable = false, length = 50)
-    private String phoneNumber;
+
     @CreationTimestamp
     private Instant createdDate = Instant.now();
     @UpdateTimestamp

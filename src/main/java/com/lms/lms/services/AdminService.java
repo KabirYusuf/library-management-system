@@ -3,8 +3,10 @@ package com.lms.lms.services;
 import com.lms.lms.data.models.Admin;
 import com.lms.lms.dtos.request.CreateAdminRequest;
 import com.lms.lms.dtos.request.LoginRequest;
+import com.lms.lms.dtos.request.UpdateAdminRequest;
 import com.lms.lms.dtos.response.CreateAdminResponse;
 import com.lms.lms.dtos.response.LoginResponse;
+import com.lms.lms.dtos.response.UpdateAdminResponse;
 
 import java.util.List;
 
@@ -19,7 +21,10 @@ public interface AdminService {
     List<Admin> getAdmins();
     String deleteAdminById(Long id);
 
-    String deleteByEmail(String email);
+    String deleteAdminByEmail(String email);
 
     void deleteAll();
+
+    UpdateAdminResponse updateAdminById(UpdateAdminRequest updateAdminRequest);
+    UpdateAdminResponse updateAdminByEmail(UpdateAdminRequest updateAdminRequest);
 }

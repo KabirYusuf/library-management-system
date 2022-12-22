@@ -21,4 +21,8 @@ public class Admin extends User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private Long id;
+    @JsonIgnore
+    private String password;
+    //    @Column(nullable = false, length = 50)
+    private String phoneNumber;
 }

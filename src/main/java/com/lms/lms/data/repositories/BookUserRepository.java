@@ -1,4 +1,4 @@
-package com.lms.lms.data.repository;
+package com.lms.lms.data.repositories;
 
 import com.lms.lms.data.models.BookUser;
 import org.springframework.data.jpa.repository.JpaRepository;

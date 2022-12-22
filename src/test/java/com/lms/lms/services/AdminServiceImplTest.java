@@ -3,6 +3,7 @@ package com.lms.lms.services;
 import com.lms.lms.data.models.Admin;
 import com.lms.lms.dtos.request.CreateAdminRequest;
 import com.lms.lms.dtos.request.LoginRequest;
+import com.lms.lms.dtos.request.UpdateAdminRequest;
 import com.lms.lms.dtos.response.CreateAdminResponse;
 import com.lms.lms.dtos.response.LoginResponse;
 import org.junit.jupiter.api.AfterEach;
@@ -33,12 +34,14 @@ class AdminServiceImplTest {
 
     @BeforeEach
     void setUp() {
+//        adminService.deleteAll();
         createAdminRequest = new CreateAdminRequest();;
         createAdminRequest.setEmail("bolaji@gmail.com");
         createAdminRequest.setFirstName("Kabir");
         createAdminRequest.setLastName("Yusuf");
         createAdminRequest.setPassword("ade1236");
         createAdminRequest.setPhoneNumber("08065923833");
+        createAdminResponse = adminService.createAdmin(createAdminRequest);
 
 
     }
@@ -49,19 +52,19 @@ class AdminServiceImplTest {
     }
     @Test
     void testThatAdminCanBeCreated(){
-        createAdminResponse = adminService.createAdmin(createAdminRequest);
+//        createAdminResponse = adminService.createAdmin(createAdminRequest);
         assertNotNull(createAdminResponse.getId());
         assertEquals("bolaji@gmail.com", createAdminResponse.getEmail());
     }
     @Test
     void testThatAdminCanBeFoundByEmail(){
-        createAdminResponse = adminService.createAdmin(createAdminRequest);
+//        createAdminResponse = adminService.createAdmin(createAdminRequest);
         Admin foundAdmin = adminService.findAdminByEmail("bolaji@gmail.com");
         assertEquals(createAdminResponse.getEmail(), foundAdmin.getEmail());
     }
     @Test
     void testThatAdminCanLoginUsingTheCorrectEmailAndPassWord(){
-        createAdminResponse = adminService.createAdmin(createAdminRequest);
+//        createAdminResponse = adminService.createAdmin(createAdminRequest);
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setPassword("ade1236");
         loginRequest.setEmail("bolaji@gmail.com");
@@ -70,8 +73,8 @@ class AdminServiceImplTest {
     }
     @Test
     void testThatListOfAdminIsGreaterIncreasesByOneWhenANewAdminIsCreatedAndSaved(){
-        adminService.deleteAll();
-        createAdminResponse = adminService.createAdmin(createAdminRequest);
+
+//        createAdminResponse = adminService.createAdmin(createAdminRequest);
         List<Admin> adminsAfterSavingFirstAdmin = adminService.getAdmins();
         assertEquals(1, adminsAfterSavingFirstAdmin.size());
         CreateAdminRequest createAdminRequest1 = new CreateAdminRequest();
@@ -88,14 +91,25 @@ class AdminServiceImplTest {
     }
     @Test
     void testThatSizeOfAdminListDecreaseByOneWhenOneAdminIsDeleted(){
-        createAdminResponse = adminService.createAdmin(createAdminRequest);
+//        createAdminResponse = adminService.createAdmin(createAdminRequest);
         List<Admin> listOfAdminsAfterSavingOneAdmin = adminService.getAdmins();
         assertEquals(1, listOfAdminsAfterSavingOneAdmin.size());
 
-        adminService.deleteByEmail("bolaji@gmail.com");
+        adminService.deleteAdminByEmail("bolaji@gmail.com");
 
         List<Admin> listOfAdminsAfterDeletingOneAdmin = adminService.getAdmins();
         assertEquals(0, listOfAdminsAfterDeletingOneAdmin.size());
+    }
+
+    @Test
+    void adminCanBeUpdated(){
+        System.out.println(createAdminResponse.getId());
+        UpdateAdminRequest updateAdminRequest = new UpdateAdminRequest();
+        Admin foundAdmin = adminService.findAdminById(40L);
+        assertEquals("Abdul", foundAdmin.getFirstName());
+        assertEquals("Yusuf", foundAdmin.getLastName());
+        assertEquals("majeed123", foundAdmin.getPassword());
+
 
     }
 }

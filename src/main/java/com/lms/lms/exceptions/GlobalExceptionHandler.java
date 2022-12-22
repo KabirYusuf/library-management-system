@@ -8,7 +8,17 @@ import org.springframework.web.context.request.WebRequest;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(AdminException.class)
-    public ResponseEntity<?> handleBookErrorEx(AdminException ex, WebRequest request){
+    public ResponseEntity<?> handleAdminErrorEx(AdminException ex, WebRequest request){
+        ApiErrorDetail apiErrorDetail = new ApiErrorDetail(ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(apiErrorDetail, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(BookException.class)
+    public ResponseEntity<?> handleBookErrorEx(BookException ex, WebRequest request){
+        ApiErrorDetail apiErrorDetail = new ApiErrorDetail(ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(apiErrorDetail, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(AuthorException.class)
+    public ResponseEntity<?> handleAuthorErrorEx(AuthorException ex, WebRequest request){
         ApiErrorDetail apiErrorDetail = new ApiErrorDetail(ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(apiErrorDetail, HttpStatus.NOT_FOUND);
     }
