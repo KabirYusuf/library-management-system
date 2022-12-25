@@ -15,13 +15,16 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @SuperBuilder
-public class Author extends User {
+public class Author extends User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private Long id;
-    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn
+//    private String firstName;
+//    private String lastName;
+//    private String email;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "Authors_Id")
+    @JsonIgnore
     private List<Book> books = new ArrayList<>();
-
 }

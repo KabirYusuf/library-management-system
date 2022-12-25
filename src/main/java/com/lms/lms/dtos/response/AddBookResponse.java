@@ -3,8 +3,7 @@ package com.lms.lms.dtos.response;
 import lombok.Data;
 
 @Data
-public class CreateBookResponse {
-    private Long id;
-    private String bookName;
+public class AddBookResponse {
     private final String message = "Book added successfully";
+    private String bookName;
 }

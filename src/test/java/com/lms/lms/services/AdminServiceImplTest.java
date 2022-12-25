@@ -1,9 +1,9 @@
 package com.lms.lms.services;
 
 import com.lms.lms.data.models.Admin;
-import com.lms.lms.dtos.request.CreateAdminRequest;
-import com.lms.lms.dtos.request.LoginRequest;
-import com.lms.lms.dtos.request.UpdateAdminRequest;
+import com.lms.lms.data.models.Author;
+import com.lms.lms.data.models.Book;
+import com.lms.lms.dtos.request.*;
 import com.lms.lms.dtos.response.CreateAdminResponse;
 import com.lms.lms.dtos.response.LoginResponse;
 import org.junit.jupiter.api.AfterEach;
@@ -22,6 +22,10 @@ class AdminServiceImplTest {
 
     @Autowired
     private AdminService adminService;
+    @Autowired
+    private BookService bookService;
+    @Autowired
+    private AuthorService authorService;
 
 //    @MockBean
 //    private AdminRepository adminRepository;
@@ -102,14 +106,54 @@ class AdminServiceImplTest {
     }
 
     @Test
-    void adminCanBeUpdated(){
-        System.out.println(createAdminResponse.getId());
-        UpdateAdminRequest updateAdminRequest = new UpdateAdminRequest();
-        Admin foundAdmin = adminService.findAdminById(40L);
-        assertEquals("Abdul", foundAdmin.getFirstName());
-        assertEquals("Yusuf", foundAdmin.getLastName());
-        assertEquals("majeed123", foundAdmin.getPassword());
+    void adminCanBeUpdatedByEmail(){
 
+        Admin foundAdminBeforeUpdate = adminService.findAdminByEmail("bolaji@gmail.com");
+        assertEquals("Kabir", foundAdminBeforeUpdate.getFirstName());
+        assertEquals("Yusuf", foundAdminBeforeUpdate.getLastName());
+
+        UpdateAdminRequest updateAdminRequest = new UpdateAdminRequest();
+        updateAdminRequest.setFirstName("Abdul");
+        updateAdminRequest.setEmail("bolaji@gmail.com");
+        adminService.updateAdminByEmail(updateAdminRequest);
+        Admin foundAdminAfterUpdate = adminService.findAdminByEmail("bolaji@gmail.com");
+        assertEquals("Abdul", foundAdminAfterUpdate.getFirstName());
+        assertEquals("Yusuf", foundAdminAfterUpdate.getLastName());
+        assertEquals("ade1236", foundAdminAfterUpdate.getPassword());
+    }
+    @Test
+    void sizeOfBookRepositoryIncreasesWhenAdminAddsANewBookTest(){
+
+        Book book = new Book();
+        book.setBookName("Chemistry");
+        book.setIsbn(1233L);
+        book.setQuantity(5);
+        book.setYearPublished("2022");
+
+        CreateAuthorRequest createAuthorRequest1 = new CreateAuthorRequest();
+        CreateAuthorRequest createAuthorRequest2 = new CreateAuthorRequest();
+        createAuthorRequest1.setEmail("autho1@gmail.com");
+        createAuthorRequest2.setEmail("autho2@gmail.com");
+        authorService.createAuthor(createAuthorRequest1);
+        authorService.createAuthor(createAuthorRequest2);
+
+
+
+        AddBookRequest addBookRequest = new AddBookRequest();
+        addBookRequest.setBook(book);
+        List<Long> authorIds = List.of(1L,2L);
+        addBookRequest.setAuthorIds(authorIds);
+
+        List<Book> sizeOfBookRepoBeforeAddingABook = adminService.getAllBooks();
+        assertEquals(0, sizeOfBookRepoBeforeAddingABook.size());
+        adminService.addBook(addBookRequest);
+        List<Book> sizeOfBookRepoAfterAddingABook = adminService.getAllBooks();
+        assertEquals(1, sizeOfBookRepoAfterAddingABook.size());
+        Author author = authorService.getAuthorByEmail("autho1@gmail.com");
+        assertEquals(1, author.getBooks().size());
+
+//        Book foundBook = bookService.getBookByIsbn(1233L);
+//        assertEquals(2, foundBook.getAuthors().size());
 
     }
 }

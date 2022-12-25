@@ -1,19 +1,18 @@
 package com.lms.lms.services;
 
 import com.lms.lms.data.models.Admin;
+import com.lms.lms.data.models.Author;
+import com.lms.lms.data.models.Book;
 import com.lms.lms.data.repositories.AdminRepository;
-import com.lms.lms.dtos.request.CreateAdminRequest;
-import com.lms.lms.dtos.request.LoginRequest;
-import com.lms.lms.dtos.request.UpdateAdminRequest;
-import com.lms.lms.dtos.response.CreateAdminResponse;
-import com.lms.lms.dtos.response.LoginResponse;
-import com.lms.lms.dtos.response.UpdateAdminResponse;
+import com.lms.lms.dtos.request.*;
+import com.lms.lms.dtos.response.*;
 import com.lms.lms.exceptions.AdminException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,6 +26,13 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private ModelMapper mapper;
 
+    @Autowired
+    private BookService bookService;
+
+    @Autowired
+    private AuthorService authorService;
+
+
 
     @Override
     public CreateAdminResponse createAdmin(CreateAdminRequest createAdminRequest) {
@@ -39,6 +45,7 @@ public class AdminServiceImpl implements AdminService {
                 phoneNumber(createAdminRequest.getPhoneNumber()).build();
         Admin savedAdmin = adminRepository.save(admin);
         return mapper.map(savedAdmin, CreateAdminResponse.class);
+
     }
 
     @Override
@@ -96,7 +103,33 @@ public class AdminServiceImpl implements AdminService {
         updateAdminResponse.setId(foundAdmin.getId());
         return updateAdminResponse;
     }
-@Override
+
+    @Override
+    public AddBookResponse addBook(AddBookRequest addBookRequest) {
+        List<Author> authorsId = new ArrayList<>();
+        CreateBookRequest createBookRequest = new CreateBookRequest();
+//        List<Long> authorIds = addBookRequest.getAuthorId();
+//        for (int i = 0; i < authorIds.size(); i++) {
+//            Long foundIds = authorIds.get(i);
+//            createBookRequest.setAuthorIds(addBookRequest.getAuthorId().get(i));
+//        }
+        createBookRequest.setAuthorIds(addBookRequest.getAuthorIds());
+        createBookRequest.setBookName(addBookRequest.getBook().getBookName());
+        createBookRequest.setIsbn(addBookRequest.getBook().getIsbn());
+        createBookRequest.setQuantity(addBookRequest.getBook().getQuantity());
+        createBookRequest.setYearPublished(addBookRequest.getBook().getYearPublished());
+        CreateBookResponse addedBook = bookService.createBook(createBookRequest);
+        return mapper.map(addedBook, AddBookResponse.class);
+//        return null;
+
+    }
+
+    @Override
+    public List<Book> getAllBooks() {
+        return bookService.getAllBooks();
+    }
+
+    @Override
 public UpdateAdminResponse updateAdminById(UpdateAdminRequest updateAdminRequest) {
     if (adminRepository.findById(updateAdminRequest.getId()).isEmpty())throw new AdminException("Admin does not exist");
     Admin foundAdmin = findAdminById(updateAdminRequest.getId());

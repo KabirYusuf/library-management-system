@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 
@@ -20,7 +22,6 @@ private BookService bookService;
 private CreateBookResponse createBookResponse;
     @BeforeEach
     void setUp() {
-
         createBookRequest = new CreateBookRequest();
         createBookRequest.setBookName("First Book");
         createBookRequest.setIsbn(123456L);
@@ -29,9 +30,9 @@ private CreateBookResponse createBookResponse;
         author.setFirstName("Kabir");
         author.setLastName("Yusuf");
         author.setEmail("kabir@gmail.com");
-//        createBookRequest.setAuthor(author);
-//        createBookResponse = bookService.saveBook(createBookRequest);
-
+        Author author1 = new Author();
+        List<Author> authors = List.of(author, author1);
+//        createBookRequest.setAuthors(authors);
     }
 
     @AfterEach
@@ -40,6 +41,7 @@ private CreateBookResponse createBookResponse;
     }
     @Test
     void testThatBookCanBeCreated(){
+        createBookResponse = bookService.createBook(createBookRequest);
         assertNotNull(createBookResponse.getId());
     }
 }

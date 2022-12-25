@@ -1,9 +1,12 @@
 package com.lms.lms.controllers;
 
 import com.lms.lms.data.models.Admin;
+import com.lms.lms.data.models.Book;
+import com.lms.lms.dtos.request.AddBookRequest;
 import com.lms.lms.dtos.request.CreateAdminRequest;
 import com.lms.lms.dtos.request.LoginRequest;
 import com.lms.lms.dtos.request.UpdateAdminRequest;
+import com.lms.lms.dtos.response.AddBookResponse;
 import com.lms.lms.dtos.response.CreateAdminResponse;
 import com.lms.lms.dtos.response.LoginResponse;
 import com.lms.lms.dtos.response.UpdateAdminResponse;
@@ -24,7 +27,6 @@ public class AdminController {
     @PostMapping("/create")
     public ResponseEntity<CreateAdminResponse> createAdmin(@RequestBody CreateAdminRequest createAdminRequest){
         return new ResponseEntity<>(adminService.createAdmin(createAdminRequest), HttpStatus.CREATED);
-
     }
 
     @GetMapping("/findById/{adminId}")
@@ -43,6 +45,10 @@ public class AdminController {
     @GetMapping("/getAdmins")
     public ResponseEntity<List<Admin>> getAdmins(){
         return new ResponseEntity<>(adminService.getAdmins(), HttpStatus.CREATED);
+    }
+    @GetMapping("/getAllBooks")
+    public ResponseEntity<List<Book>> getAllBooks(){
+        return new ResponseEntity<>(adminService.getAllBooks(), HttpStatus.CREATED);
     }
     @DeleteMapping("/deleteById/{adminId}")
     public String deleteAdminById(@PathVariable("adminId") Long id){
@@ -64,6 +70,10 @@ public class AdminController {
     @PutMapping("/updateByEmail")
     public UpdateAdminResponse updateAdminByEmail(@RequestBody UpdateAdminRequest updateAdminRequest){
         return adminService.updateAdminByEmail(updateAdminRequest);
+    }
+    @PostMapping("/addBook")
+    public ResponseEntity<AddBookResponse> addBook(@RequestBody AddBookRequest addBookRequest){
+        return new ResponseEntity<>(adminService.addBook(addBookRequest), HttpStatus.CREATED);
     }
 
 }

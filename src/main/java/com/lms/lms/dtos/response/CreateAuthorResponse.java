@@ -8,4 +8,5 @@ public class CreateAuthorResponse {
     @JsonIgnore
     private Long id;
     private final String message = "Successful";
+//    private String message;
 }
